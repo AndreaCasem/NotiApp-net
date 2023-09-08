@@ -1,0 +1,20 @@
+﻿@model NotiApp.Models.Nota;
+@{
+    ViewData["Title"] = "Editar Nota";
+}
+
+<div class="text-center">
+    <h1>Crear Nota</h1>
+    <form asp-controller="Nota" asp-action="EditarNota" method="post">
+        <!-- Enviando el Id de la nota como un campo oculto-->
+        <input type="hidden" name="IdNota" value="@Model.IdNota" />
+
+        <input class="form-control mb-3" type="text" placeholder="Título de tu nota" name="TituloNota" value="@Model.TituloNota" required />
+        <input class="form-control mb-3" type="text" placeholder="Descripción de tu nota" name="Descripcion" value="@Model.Descripcion" required />
+        <div class="d-grid gap-2 mb-3">
+            <button class="btn btn-primary" type="submit">Editar Nota</button>
+        </div>
+
+    </form>
+    <a asp-action="Index">Volver a mis notas</a>
+</div>

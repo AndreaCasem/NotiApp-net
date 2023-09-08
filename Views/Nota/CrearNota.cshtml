@@ -1,0 +1,17 @@
+﻿@model NotiApp.Models.Nota;
+@{
+    ViewData["Title"] = "Crear Nota";
+}
+
+<div class="text-center">
+    <h1>Crear Nota</h1>
+    <form asp-controller="Nota" asp-action="CrearNota" method="post">
+        <input class="form-control mb-3" type="text" placeholder="Título de tu nota" name="TituloNota" required />
+        <input class="form-control mb-3" type="text" placeholder="Descripción de tu nota" name="Descripcion" required />
+        <div class="d-grid gap-2 mb-3">
+            <button class="btn btn-primary" type="submit">Crear Nota</button>
+        </div>
+       
+    </form>
+    <a asp-action="Index">Volver a mis notas</a>
+</div>
