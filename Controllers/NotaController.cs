@@ -9,21 +9,23 @@ namespace NotiApp.Controllers
 {
     public class NotaController : Controller
     {
-        private readonly NotiDbContext _contexto;
+        private readonly DbContextSingleton _dbContextSingleton;
+        private readonly NotiDbContext _dbContext; // Campo privado para almacenar el contexto de la base de datos
 
-        public NotaController(NotiDbContext contexto)
+        public NotaController(DbContextSingleton dbContextSingleton)
         {
-            _contexto = contexto;
+            _dbContextSingleton = dbContextSingleton;
+            _dbContext = _dbContextSingleton.GetDbContext(); // Inicializa el contexto en el constructor
         }
 
         // Mostrar notas
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            return View(await _contexto.Nota.ToListAsync());
+            return View(await _dbContext.Nota.ToListAsync());
         }
 
-   
+
         [HttpGet]
         public IActionResult CrearNota()
         {
@@ -37,8 +39,8 @@ namespace NotiApp.Controllers
 
             if (nota != null)
             {
-                _contexto.Nota.Add(nota);
-                await _contexto.SaveChangesAsync();
+                _dbContext.Nota.Add(nota);
+                await _dbContext.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
             else
@@ -51,12 +53,13 @@ namespace NotiApp.Controllers
         [HttpGet]
         public IActionResult EditarNota(int? Id)
         {
+         
             if (Id == null)
             {
                 return NotFound();
             }
 
-            var nota = _contexto.Nota.Find(Id);
+            var nota = _dbContext.Nota.Find(Id);
 
             if (nota == null)
             {
@@ -70,13 +73,14 @@ namespace NotiApp.Controllers
         [HttpPost]
         public async Task<IActionResult> EditarNota(Nota nota)
         {
+
             if (nota != null)
             {
                 // Recogemos el valor de IdNota del formulario
                 int idNota = nota.IdNota;
 
                 // Buscamos la nota correspondiente en la base de datos
-                var notaExistente = await _contexto.Nota.FindAsync(idNota);
+                var notaExistente = await _dbContext.Nota.FindAsync(idNota);
 
                 if (notaExistente != null)
                 {
@@ -85,7 +89,7 @@ namespace NotiApp.Controllers
                     notaExistente.Descripcion = nota.Descripcion;
 
                     // Guardamos los cambios
-                    await _contexto.SaveChangesAsync();
+                    await _dbContext.SaveChangesAsync();
                     return RedirectToAction("Index");
                 }
                 else
@@ -108,15 +112,15 @@ namespace NotiApp.Controllers
                 return NotFound();
             }
 
-            var nota = await _contexto.Nota.FindAsync(Id);
+            var nota = await _dbContext.Nota.FindAsync(Id);
 
             if (nota == null)
             {
                 return NotFound();
             }
 
-            _contexto.Nota.Remove(nota);
-            await _contexto.SaveChangesAsync();
+            _dbContext.Nota.Remove(nota);
+            await _dbContext.SaveChangesAsync();
 
             return RedirectToAction("Index");
         }

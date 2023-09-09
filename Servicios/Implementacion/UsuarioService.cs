@@ -6,10 +6,13 @@ namespace NotiApp.Servicios.Implementacion
 {
     public class UsuarioService : IUsuarioService
     {
+        private readonly DbContextSingleton _dbContextSingleton;
         private readonly NotiDbContext _dbContext;
-        public UsuarioService(NotiDbContext dbContext)
+
+        public UsuarioService(DbContextSingleton dbContextSingleton)
         {
-            _dbContext = dbContext;
+            _dbContextSingleton = dbContextSingleton;
+            _dbContext = _dbContextSingleton.GetDbContext();
         }
 
         public async Task<Usuario> GetUsuario(string correo, string clave)

@@ -19,15 +19,18 @@ namespace NotiApp.Controllers
             _usuarioServicio = usuarioServicio;
         }
 
+        
         [HttpGet]
         public IActionResult Registrarse()
         {
             return View();
         }
 
+        // Formulario de registro
         [HttpPost]
         public async Task<IActionResult> Registrarse(Usuario modelo)
         {
+
             modelo.Clave = Utilidades.EncriptarClave(modelo.Clave);
 
             Usuario usuarioCreado = await _usuarioServicio.SaveUsuario(modelo);
@@ -44,6 +47,7 @@ namespace NotiApp.Controllers
             return View();
         }
 
+        // Formulario para iniciar sesión
         [HttpPost]
         public async Task<IActionResult> IniciarSesion(string correo, string clave)
         {
@@ -73,7 +77,7 @@ namespace NotiApp.Controllers
                 properties
                 );
 
-            return RedirectToAction("Index", "Nota"); 
+            return RedirectToAction("Index", "Nota"); // Vista  Index del controlador Nota
         }
     }
 }

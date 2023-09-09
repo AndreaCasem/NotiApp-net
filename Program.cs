@@ -6,6 +6,7 @@ using NotiApp.Servicios.Implementacion;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using NotiApp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,7 +41,15 @@ builder.Services.AddControllersWithViews(options => {
         );
 });
 
+// Configuración del Singleton DbContext.
+var serviceProvider = builder.Services.BuildServiceProvider();
+var dbContextSingleton = DbContextSingleton.Instance(serviceProvider);
+
+builder.Services.AddSingleton(dbContextSingleton);
+
+
 var app = builder.Build();
+
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -62,5 +71,4 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Inicio}/{action=IniciarSesion}/{id?}"); // Dirigir a la vista IniciarSesion por defecto
-
 app.Run();
